@@ -88,16 +88,43 @@ namespace kinova
 
 
         // define pick_place joint value and pose
+        std::vector<double> home_joint_;
+        std::vector<double> PrG_joint_;
+        std::vector<double> G_joint_;
+        std::vector<double> PoG_joint_;
+        std::vector<double> int_joint_;
+        std::vector<double> PrR_joint_;
+        std::vector<double> R_joint_;
+        std::vector<double> PoR_joint_;
+        
+        std::vector<double> point1_joint_;
+        std::vector<double> point2_joint_;
+        std::vector<double> point3_joint_;
+        std::vector<double> point4_joint_;
+        std::vector<double> point5_joint_;
+        
         std::vector<double> start_joint_;
         std::vector<double> grasp_joint_;
         std::vector<double> pregrasp_joint_;
         std::vector<double> postgrasp_joint_;
+        
 
-        geometry_msgs::PoseStamped start_pose_;
+        //geometry_msgs::PoseStamped start_pose_;
         geometry_msgs::PoseStamped grasp_pose_;
         geometry_msgs::PoseStamped can_pose_;
         geometry_msgs::PoseStamped pregrasp_pose_;
         geometry_msgs::PoseStamped postgrasp_pose_;
+        
+        geometry_msgs::PoseStamped start_pose_;
+        geometry_msgs::PoseStamped PrG_pose_;
+        geometry_msgs::PoseStamped G_pose_;
+        geometry_msgs::PoseStamped PoG_pose_;
+        geometry_msgs::PoseStamped int1_pose_;
+        geometry_msgs::PoseStamped int2_pose_;
+        geometry_msgs::PoseStamped int3_pose_;
+        geometry_msgs::PoseStamped PrR_pose_;
+        geometry_msgs::PoseStamped R_pose_;
+        geometry_msgs::PoseStamped PoR_pose_;
 
 
         void build_workscene();

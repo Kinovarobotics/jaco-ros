@@ -57,6 +57,18 @@ add_executable(pick_place src/pick_place.cpp include/pick_place.h)
 target_link_libraries(pick_place ${catkin_LIBRARIES} ${Boost_LIBRARIES} ${kinova_driver_LIBRARIES})
 install(TARGETS pick_place DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
 
+add_executable(pick_place_gen2 src/pick_place_gen2.cpp include/pick_place.h)
+target_link_libraries(pick_place_gen2 ${catkin_LIBRARIES} ${Boost_LIBRARIES} ${kinova_driver_LIBRARIES})
+install(TARGETS pick_place_gen2 DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
+
+add_executable(pick_place_jaco src/pick_place_jaco.cpp include/pick_place.h)
+target_link_libraries(pick_place_jaco ${catkin_LIBRARIES} ${Boost_LIBRARIES} ${kinova_driver_LIBRARIES})
+install(TARGETS pick_place_jaco DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
+
+add_executable(trace_line src/trace_line.cpp include/pick_place.h)
+target_link_libraries(trace_line ${catkin_LIBRARIES} ${Boost_LIBRARIES} ${kinova_driver_LIBRARIES})
+install(TARGETS trace_line DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
+
 add_executable(test_accuracy src/test_accuracy.cpp include/test_accuracy.h)
 target_link_libraries(test_accuracy ${catkin_LIBRARIES} ${Boost_LIBRARIES} ${kinova_driver_LIBRARIES})
 install(TARGETS test_accuracy DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
