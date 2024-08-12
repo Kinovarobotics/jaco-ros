@@ -468,6 +468,31 @@ struct AngularInfo
 		Actuator6 = 0.0f;
 		Actuator7 = 0.0f;
 	}
+
+	float& operator [](const int idx){
+		switch (idx)
+		{
+			case 0: return Actuator1;
+			case 1: return Actuator2;
+			case 2: return Actuator3;
+			case 3: return Actuator4;
+			case 4: return Actuator5;
+			case 5: return Actuator6;
+			case 6: return Actuator7;
+		}
+	}
+    float operator [](const int idx) const{
+		switch (idx)
+		{
+			case 0: return Actuator1;
+			case 1: return Actuator2;
+			case 2: return Actuator3;
+			case 3: return Actuator4;
+			case 4: return Actuator5;
+			case 5: return Actuator6;
+			case 6: return Actuator7;
+		}
+	}
 };
 
 /** @brief This data structure holds values in an cartesian control context.
