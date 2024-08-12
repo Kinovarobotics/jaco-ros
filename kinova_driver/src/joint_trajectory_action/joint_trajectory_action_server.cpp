@@ -45,7 +45,7 @@ JointTrajectoryActionController::JointTrajectoryActionController(ros::NodeHandle
         trajectory_constraints_[joint_names_[i]] = t;
     }
 
-    pn.param("constraints/stopped_velocity_tolerance", stopped_velocity_tolerance_, 0.01);
+    pn.param("constraints/stopped_velocity_tolerance", stopped_velocity_tolerance_, 0.00);
 
 
     pub_controller_command_ = nh_.advertise<trajectory_msgs::JointTrajectory>
@@ -236,10 +236,13 @@ void JointTrajectoryActionController::controllerStateCB(const control_msgs::Foll
     {
         // Checks that we have ended inside the goal constraints
         bool inside_goal_constraints = true;
-        for (size_t i = 0; i < msg->joint_names.size() && inside_goal_constraints; ++i)
+        bool inside_velocity_constraints = true;
+        
+        for (size_t i = 0; i < msg->joint_names.size() && inside_goal_constraints && inside_velocity_constraints; ++i)
         {
             // computing error from goal pose
             double abs_error = fabs(msg->actual.positions[i] - current_traj_.points[last].positions[i]);
+            abs_error = abs_error - 2*M_PI*std::floor((abs_error+M_PI)/(2*M_PI)); // fix rotation to [-PI,PI)
             double goal_constraint = goal_constraints_[msg->joint_names[i]];
             if (goal_constraint >= 0 && abs_error > goal_constraint)
                 inside_goal_constraints = false;
@@ -247,10 +250,11 @@ void JointTrajectoryActionController::controllerStateCB(const control_msgs::Foll
             if ( !(msg->desired.velocities.empty()) && (fabs(msg->desired.velocities[i]) < 1e-6) )
             {
                 if (fabs(msg->actual.velocities[i]) > stopped_velocity_tolerance_)
-                    inside_goal_constraints = false;
+                    inside_velocity_constraints = false;
             }
         }
-        if (inside_goal_constraints)
+
+        if (inside_goal_constraints && inside_velocity_constraints)
         {
             active_goal_.setSucceeded();
             has_active_goal_ = false;
@@ -262,7 +266,17 @@ void JointTrajectoryActionController::controllerStateCB(const control_msgs::Foll
         }
         else
         {
-            ROS_WARN("Aborting because we wound up outside the goal constraints");
+            ROS_WARN("Aborting because we wound up outside the %s constraints", inside_velocity_constraints?"goal":"velocity");
+            for(int j = 0; j<7; j++){
+                double abs_error; 
+                if(!inside_goal_constraints){
+                    abs_error = fabs(msg->actual.positions[j] - current_traj_.points[last].positions[j]); 
+                    abs_error = abs_error - 2*M_PI*std::floor((abs_error+M_PI)/(2*M_PI)); // fix rotation to [-PI,PI)
+                } else {
+                    abs_error = fabs(msg->actual.velocities[j] - stopped_velocity_tolerance_);
+                }
+                ROS_WARN_STREAM("Error for joint " << j+1 << ": " << abs_error);
+            }
             active_goal_.setAborted();
             has_active_goal_ = false;
         }
