@@ -1,0 +1,12 @@
+sensors:
+  - sensor_plugin: occupancy_map_monitor/DepthImageOctomapUpdater
+    image_topic: /hololens2/image_lt
+    queue_size: 5
+    near_clipping_plane_distance: 0.1
+    far_clipping_plane_distance: 1.0
+    shadow_threshold: 0.2
+    padding_scale: 4.0
+    padding_offset: 0.03
+    max_update_rate: 1.0
+    filtered_cloud_topic: /filtered_cloud
+    ns: hololens2
