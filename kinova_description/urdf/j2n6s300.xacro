@@ -91,12 +91,13 @@
     <xacro:property name="joint_4_torque_limit" value="20" />
 
     <xacro:property name="joint_5" value="joint_5" />
-    <xacro:property name="joint_5_type" value="revolute" />
+    <xacro:property name="joint_5_type" value="continuous" />
     <xacro:property name="joint_5_axis_xyz" value="0 0 1" />
     <xacro:property name="joint_5_origin_xyz" value="0 -0.03703 -0.06414" />
     <xacro:property name="joint_5_origin_rpy" value="${J_PI/3} 0 ${J_PI}" />
-    <xacro:property name="joint_5_lower_limit" value="${66/180*J_PI}" />
-    <xacro:property name="joint_5_upper_limit" value="${294/180*J_PI}" />
+   
+    <xacro:property name="joint_5_lower_limit" value="${-2*J_PI}" />
+    <xacro:property name="joint_5_upper_limit" value="${2*J_PI}" />
     <xacro:property name="joint_5_velocity_limit" value="${48*J_PI/180}" />
     <xacro:property name="joint_5_torque_limit" value="20" />
 
