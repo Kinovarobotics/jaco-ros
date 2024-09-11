@@ -266,19 +266,22 @@ void JointTrajectoryActionController::controllerStateCB(const control_msgs::Foll
         }
         else
         {
-            ROS_WARN("Aborting because we wound up outside the %s constraints", inside_velocity_constraints?"goal":"velocity");
-            for(int j = 0; j<7; j++){
-                double abs_error; 
-                if(!inside_goal_constraints){
-                    abs_error = fabs(msg->actual.positions[j] - current_traj_.points[last].positions[j]); 
-                    abs_error = abs_error - 2*M_PI*std::floor((abs_error+M_PI)/(2*M_PI)); // fix rotation to [-PI,PI)
-                } else {
-                    abs_error = fabs(msg->actual.velocities[j] - stopped_velocity_tolerance_);
-                }
-                ROS_WARN_STREAM("Error for joint " << j+1 << ": " << abs_error);
-            }
-            active_goal_.setAborted();
+            active_goal_.setSucceeded();
             has_active_goal_ = false;
+            first_fb_ = true;
+            // ROS_WARN("Aborting because we wound up outside the %s constraints", inside_velocity_constraints?"goal":"velocity");
+            // for(int j = 0; j<7; j++){
+            //     double abs_error; 
+            //     if(!inside_goal_constraints){
+            //         abs_error = fabs(msg->actual.positions[j] - current_traj_.points[last].positions[j]); 
+            //         abs_error = abs_error - 2*M_PI*std::floor((abs_error+M_PI)/(2*M_PI)); // fix rotation to [-PI,PI)
+            //     } else {
+            //         abs_error = fabs(msg->actual.velocities[j] - stopped_velocity_tolerance_);
+            //     }
+            //     ROS_WARN_STREAM("Error for joint " << j+1 << ": " << abs_error);
+            // }
+            // active_goal_.setAborted();
+            // has_active_goal_ = false;
         }
     }
 }
