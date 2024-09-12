@@ -25,8 +25,8 @@ JointTrajectoryController::JointTrajectoryController(kinova::KinovaComm &kinova_
     {
         joint_names_[i] = prefix_ + "_joint_" + boost::lexical_cast<std::string>(i+1);
     }
-
-    timer_pub_joint_vel_ = nh_.createTimer(ros::Duration(0.0085), &JointTrajectoryController::pub_joint_vel, this, false, false);
+    // the timer here affects the frequency of publishing joint velocity command -> overshoot or undershoot
+    timer_pub_joint_vel_ = nh_.createTimer(ros::Duration(0.0097), &JointTrajectoryController::pub_joint_vel, this, false, false);
     terminate_thread_ = false;
 
     thread_update_state_ = new boost::thread(boost::bind(&JointTrajectoryController::update_state, this));
@@ -163,6 +163,18 @@ void JointTrajectoryController::pub_joint_vel(const ros::TimerEvent&)
 
     if (traj_command_points_index_ <  kinova_angle_command_.size() && ros::ok())
     {
+        bool last_pass_for_this_point = false;
+        ros::Duration time_from_timer_start = (ros::Time::now() - time_pub_joint_vel_);
+
+        // // If we're overshooting
+        // if ((time_from_timer_start >= traj_command_points_[traj_command_points_index_].time_from_start))
+        // {
+        //     // Go to next point
+        //     ROS_INFO_STREAM("Overshoot by " << (time_from_timer_start - traj_command_points_[traj_command_points_index_].time_from_start).toSec()*1000 << " milliseconds, next point.");
+        //     traj_command_points_index_++;
+        //     last_pass_for_this_point = true;
+        // }
+
         const ros::Duration current_time_from_start = ros::Time::now() - time_pub_joint_vel_;
         // check for remaining motion time if in last command
         if(traj_command_points_index_ == kinova_angle_command_.size()-1)
@@ -174,7 +186,6 @@ void JointTrajectoryController::pub_joint_vel(const ros::TimerEvent&)
                     current_velocity_command[i] = 0;
             }
         }
-        
         joint_velocity_msg.joint1 = current_velocity_command[0];
         joint_velocity_msg.joint2 = current_velocity_command[1];
         joint_velocity_msg.joint3 = current_velocity_command[2];
@@ -182,6 +193,21 @@ void JointTrajectoryController::pub_joint_vel(const ros::TimerEvent&)
         joint_velocity_msg.joint5 = current_velocity_command[4];
         joint_velocity_msg.joint6 = current_velocity_command[5];
         joint_velocity_msg.joint7 = current_velocity_command[6];
+
+        // // If time left for this traj point is less than timer precision (10ms), adjust speed to not overshoot the point
+        // if ( (traj_command_points_[traj_command_points_index_].time_from_start - time_from_timer_start).toSec() < 0.01) 
+        // {
+        //     float adjust_factor = 0.01/(traj_command_points_[traj_command_points_index_].time_from_start - time_from_timer_start).toSec(); //adjust_factor<1
+        //     joint_velocity_msg.joint1 *= adjust_factor;
+        //     joint_velocity_msg.joint2 *= adjust_factor;
+        //     joint_velocity_msg.joint3 *= adjust_factor;
+        //     joint_velocity_msg.joint4 *= adjust_factor;
+        //     joint_velocity_msg.joint5 *= adjust_factor;
+        //     joint_velocity_msg.joint6 *= adjust_factor;
+        //     joint_velocity_msg.joint7 *= adjust_factor;
+        //     traj_command_points_index_++;
+        //     last_pass_for_this_point = true;
+        // }
 
         pub_joint_velocity_.publish(joint_velocity_msg);
 
