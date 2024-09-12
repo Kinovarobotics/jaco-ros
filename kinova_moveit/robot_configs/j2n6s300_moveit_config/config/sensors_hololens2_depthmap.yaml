@@ -5,8 +5,8 @@ sensors:
     near_clipping_plane_distance: 0.1
     far_clipping_plane_distance: 1.0
     shadow_threshold: 0.2
-    padding_scale: 4.0
-    padding_offset: 0.03
-    max_update_rate: 1.0
+    padding_scale: 7.0
+    padding_offset: 0.1
+    max_update_rate: 0.5
     filtered_cloud_topic: /filtered_cloud
     ns: hololens2
