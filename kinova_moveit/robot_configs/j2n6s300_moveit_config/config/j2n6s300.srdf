@@ -24,14 +24,14 @@
 
     <!--GROUP STATES: Purpose: Define a named state for a particular group, in terms of joint values. This is useful to define states like 'folded arms'-->
     <group_state name="Home" group="arm">
-        <joint name="j2n6s300_joint_1" value="4.8046852" />
+        <joint name="j2n6s300_joint_1" value="-4.8046852" />
         <!-- <joint name="j2n6s300_joint_1" value="-1.4785" /> -->
         <joint name="j2n6s300_joint_2" value="2.92482" />
         <joint name="j2n6s300_joint_3" value="1.002" />
         <joint name="j2n6s300_joint_4" value="4.2031852" />
         <!-- <joint name="j2n6s300_joint_4" value="-2.08" /> -->
-        <joint name="j2n6s300_joint_5" value="1.4458" />
-        <joint name="j2n6s300_joint_6" value="1.3233" />
+        <joint name="j2n6s300_joint_5" value="-1.4458" />
+        <joint name="j2n6s300_joint_6" value="-1.3233" />
     </group_state>
     <group_state name="Retract" group="arm">
         <!-- <joint name="j2n6s300_joint_1" value="4.7162352" /> -->
